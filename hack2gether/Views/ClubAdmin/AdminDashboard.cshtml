@@ -1,0 +1,148 @@
+﻿@model List<EventModel>
+
+@{
+    ViewData["Title"] = "Club Admin Dashboard";
+    var year = DateTime.Now.Year;
+}
+
+<div class="container mt-4">
+
+    <h1 class="mb-4">Club Admin Dashboard</h1>
+
+    <!-- Calendar Section -->
+    <section class="mb-5">
+        <h2>Event Calendar (@year)</h2>
+
+        <div class="calendar-grid">
+            @for (int month = 1; month <= 12; month++)
+            {
+                var monthName = new DateTime(year, month, 1).ToString("MMMM");
+
+                <div class="month-container">
+                    <h3>@monthName</h3>
+
+                    <table class="table table-bordered calendar-table">
+                        <thead>
+                            <tr>
+                                <th>Sun</th>
+                                <th>Mon</th>
+                                <th>Tue</th>
+                                <th>Wed</th>
+                                <th>Thu</th>
+                                <th>Fri</th>
+                                <th>Sat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var firstDay = new DateTime(year, month, 1);
+                                var daysInMonth = DateTime.DaysInMonth(year, month);
+                                int currentDay = 1;
+
+                                for (int week = 0; week < 6; week++)
+                                {
+                                    <tr>
+                                        @for (int dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++)
+                                        {
+                                            if ((week == 0 && dayOfWeek < (int)firstDay.DayOfWeek) || currentDay > daysInMonth)
+                                            {
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                var date = new DateTime(year, month, currentDay);
+                                                var eventsToday = Model.Where(e => e.Date.Date == date.Date).ToList();
+
+                                                <td class="calendar-day">
+                                                    <strong>@currentDay</strong>
+
+                                                    @if (eventsToday.Any())
+                                                    {
+                                                        <ul class="event-list">
+                                                            @foreach (var ev in eventsToday)
+                                                            {
+                                                                <li>@ev.Title</li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                </td>
+
+                                                currentDay++;
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+
+    <hr />
+
+    <!-- Add Event Form -->
+    <section class="mb-5">
+        <h2>Add Event</h2>
+
+        <form method="post" asp-action="AddEvent">
+            <div class="mb-3">
+                <label class="form-label">Event Title</label>
+                <input type="text" name="Title" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Event Date</label>
+                <input type="date" name="Date" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Event</button>
+        </form>
+    </section>
+
+    <hr />
+
+    <!-- Remove Event Form -->
+    <section class="mb-5">
+        <h2>Remove Event</h2>
+
+        <form method="post" asp-action="RemoveEvent">
+            <div class="mb-3">
+                <label class="form-label">Event Title</label>
+                <input type="text" name="Title" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-danger">Remove Event</button>
+        </form>
+    </section>
+
+</div>
+
+<style>
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+
+    .month-container {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        background: #fafafa;
+    }
+
+    .calendar-day {
+        height: 100px;
+        vertical-align: top;
+        padding: 5px;
+        font-size: 0.9rem;
+    }
+
+    .event-list {
+        padding-left: 15px;
+        margin-top: 5px;
+        font-size: 0.8rem;
+    }
+</style>

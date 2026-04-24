@@ -2,7 +2,130 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1>Student Engagement</h1>
+<style>
+    body {
+        background-color: #00447b;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+    }
 
+    .card {
+        background-color: #ffffff;
+        color: #000000;
+        border-radius: 10px;
+    }
+
+    label {
+        color: #000000;
+    }
+
+    .toggle-btn {
+        cursor: pointer;
+    }
+</style>
+
+<div class="text-center mt-5">
+    <h1 class="display-4 mb-4">Student Engagement Platform</h1>
 </div>
+
+<div class="d-flex justify-content-center">
+    <div class="card shadow p-4" style="width: 420px;">
+
+        <!-- LOGIN FORM -->
+        <div id="loginBox">
+            <h4 class="text-center mb-4">Login</h4>
+
+            <form id="loginForm" method="post" asp-controller="Account" asp-action="Login">
+                <div class="form-group mb-3">
+                    <label>Email</label>
+                    <input id="loginEmail" name="Email" class="form-control" required />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>Password</label>
+                    <input id="loginPassword" name="Password" type="password" class="form-control" required />
+                </div>
+
+                <div class="form-group mb-4">
+                    <label>Select Role</label>
+                    <select id="loginRole" name="Role" class="form-control" required>
+                        <option value="">-- Choose your role --</option>
+                        <option value="Student">Student</option>
+                        <option value="ClubAdmin">Club Admin</option>
+                        <option value="EngagementStaff">Engagement Staff</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+
+                <button type="button" class="btn btn-outline-secondary w-100 toggle-btn" onclick="showSignup()">
+                    New user? Create an account
+                </button>
+            </form>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div id="signupBox" style="display:none;">
+            <h4 class="text-center mb-4">Create Account</h4>
+
+            <form id="signupForm" method="post" asp-controller="Account" asp-action="Register">
+                <div class="form-group mb-3">
+                    <label>Email</label>
+                    <input id="signupEmail" name="Email" class="form-control" required />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>Password</label>
+                    <input id="signupPassword" name="Password" type="password" class="form-control" required />
+                </div>
+
+                <div class="form-group mb-4">
+                    <label>Select Role</label>
+                    <select id="signupRole" name="Role" class="form-control" required>
+                        <option value="">-- Choose your role --</option>
+                        <option value="Student">Student</option>
+                        <option value="ClubAdmin">Club Admin</option>
+                        <option value="EngagementStaff">Engagement Staff</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 mb-3" onclick="copyToLogin()">
+                    Sign Up
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary w-100 toggle-btn" onclick="showLogin()">
+                    Already have an account? Log in
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function showSignup() {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("signupBox").style.display = "block";
+    }
+
+    function showLogin() {
+        document.getElementById("signupBox").style.display = "none";
+        document.getElementById("loginBox").style.display = "block";
+    }
+
+    // Autofill login fields after signup
+    function copyToLogin() {
+        const email = document.getElementById("signupEmail").value;
+        const password = document.getElementById("signupPassword").value;
+        const role = document.getElementById("signupRole").value;
+
+        document.getElementById("loginEmail").value = email;
+        document.getElementById("loginPassword").value = password;
+        document.getElementById("loginRole").value = role;
+
+        // Switch back to login view after signup
+        setTimeout(() => {
+            showLogin();
+        }, 300);
+    }
+</script>

@@ -1,0 +1,172 @@
+﻿@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<style>
+    body {
+        background-color: #00447b;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+    }
+
+    .dashboard-container {
+        display: flex;
+        gap: 30px;
+        margin-top: 40px;
+        padding: 0 40px;
+    }
+
+    /* LEFT: Progress Bar */
+    .progress-wrapper {
+        width: 200px;
+        background: #00345d;
+        padding: 20px;
+        border-radius: 10px;
+        height: fit-content;
+    }
+
+    .progress-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .progress-bar-vertical {
+        width: 20px;
+        height: 400px;
+        background: #1a1a1a;
+        border-radius: 10px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .progress-fill {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: #00c853;
+        border-radius: 10px;
+    }
+
+    .milestone {
+        position: absolute;
+        left: 30px;
+        transform: translateY(50%);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .milestone img {
+            width: 40px;
+            height: 40px;
+        }
+
+    /* RIGHT: Content */
+    .content-area {
+        flex-grow: 1;
+    }
+
+    .section-card {
+        background: #ffffff;
+        color: #000000;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+    }
+
+    .section-title {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .event-card {
+        background: #f2f2f2;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .btn-custom {
+        background-color: #00447b;
+        color: #ffffff;
+    }
+</style>
+
+<div class="text-center mt-4">
+    <h1 class="display-5">Welcome to Your Student Dashboard</h1>
+    <p class="lead">Track your engagement, earn rewards, and get involved</p>
+</div>
+
+<div class="dashboard-container">
+
+    <!-- LEFT SIDE: PROGRESS BAR -->
+    <div class="progress-wrapper">
+        <div class="progress-title">Your Rewards Progress</div>
+
+        <div class="progress-bar-vertical">
+            <!-- Fill percentage (example: 45%) -->
+            <div class="progress-fill" style="height: 45%;"></div>
+
+            <!-- Milestones -->
+            <div class="milestone" style="bottom: 25%;">
+                <img src="/images/bronze.png" alt="Bronze Tier" />
+                <span>Bronze – 100 pts</span>
+            </div>
+
+            <div class="milestone" style="bottom: 50%;">
+                <img src="/images/iron.png" alt="Iron Tier" />
+                <span>Iron – 250 pts</span>
+            </div>
+
+            <div class="milestone" style="bottom: 75%;">
+                <img src="/images/gold.png" alt="Gold Tier" />
+                <span>Gold – 500 pts</span>
+            </div>
+
+            <div class="milestone" style="bottom: 100%;">
+                <img src="/images/diamond.png" alt="Diamond Tier" />
+                <span>Diamond – 1000 pts</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE: MAIN CONTENT -->
+    <div class="content-area">
+
+        <!-- Discover Events -->
+        <div class="section-card">
+            <div class="section-title">Discover Events</div>
+
+            <div class="event-card">
+                <h5>Campus Game Night</h5>
+                <p>Join us for games, snacks, and fun!</p>
+                <button class="btn btn-custom">Register</button>
+            </div>
+
+            <div class="event-card">
+                <h5>Leadership Workshop</h5>
+                <p>Earn points while building leadership skills.</p>
+                <button class="btn btn-custom">Register</button>
+            </div>
+        </div>
+
+        <!-- Check In -->
+        <div class="section-card">
+            <div class="section-title">Event Check‑In</div>
+            <p>Enter your event code to check in and earn points.</p>
+            <input class="form-control mb-2" placeholder="Enter event code" />
+            <button class="btn btn-success">Check In</button>
+        </div>
+
+        <!-- Feedback -->
+        <div class="section-card">
+            <div class="section-title">Give Feedback</div>
+            <textarea class="form-control mb-2" rows="3" placeholder="Tell us about your experience"></textarea>
+            <button class="btn btn-primary">Submit Feedback</button>
+        </div>
+
+    </div>
+</div>
