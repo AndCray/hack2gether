@@ -34,7 +34,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// ROLE CREATION - run inside a scope so scoped services can be resolved
+// Role creation (runs on startup)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -42,10 +42,11 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        // Optional: ensure database is up-to-date
+        // Ensure database exists and is migrated
         var db = services.GetRequiredService<ApplicationDbContext>();
         await db.Database.MigrateAsync();
 
+        // Create roles
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         string[] roles = { "Student", "ClubAdmin", "EngagementStaff" };
 
