@@ -73,7 +73,7 @@ namespace hack2gether.Controllers
             };
 
             _db.Users.Add(newUser);
-            _db.SaveChanges();
+            _db.SaveChanges();newUser = _db.Users.FirstOrDefault(u => u.Email == email); // Get the saved user with ID
 
             // Auto-login after signup
             HttpContext.Session.SetString("Username", newUser.Username);

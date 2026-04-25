@@ -1,4 +1,5 @@
-﻿@model hack2gether.Models.EngagementDashboardViewModel
+﻿@using hack2gether.Models
+@model hack2gether.Models.EngagementDashboardViewModel
 
 @{
     ViewData["Title"] = "Engagement Staff Dashboard";
@@ -28,6 +29,9 @@
     }
 </style>
 
+<!--Page doesn't load yet due to some error when loading the user login for Engagement Staff, 
+which leads to the other pages in this folder to not work-->
+
 <div class="text-center mt-4 mb-4">
     <h1 class="display-5">Engagement Staff Command Center</h1>
     <p>Approve events • Route notifications • Campus at a glance</p>
@@ -36,41 +40,44 @@
 <div class="container">
 
     <!-- APPROVE EVENTS SECTION -->
-    <div class="section-card">
-        <h3>Approve Events</h3>
+    @* 
+        <!-- preserved original commented block (converted to Razor comment to avoid mixed HTML/Razor parsing issues) -->
+        <div class="section-card">
+            <h3>Approve Events</h3>
 
-        @if (Model?.PendingEvents == null || !Model.PendingEvents.Any())
-        {
-            <p>No pending events.</p>
-        }
-        else
-        {
-            <table class="table table-bordered table-light">
-                <thead>
-                    <tr>
-                        <th>Event</th>
-                        <th>Date</th>
-                        <th>Club</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var evt in Model.PendingEvents)
-                    {
+            @if (Model?.PendingEvents == null || !Model.PendingEvents.Any())
+            {
+                <p>No pending events.</p>
+            }
+            else
+            {
+                <table class="table table-bordered table-light">
+                    <thead>
                         <tr>
-                            <td>@evt.Title</td>
-                            <td>@evt.Date.ToShortDateString()</td>
-                            <td>@evt.ClubName</td>
-                            <td>
-                                <button class="btn btn-success btn-sm">Approve</button>
-                                <button class="btn btn-danger btn-sm">Reject</button>
-                            </td>
+                            <th>Event</th>
+                            <th>Date</th>
+                            <th>Club</th>
+                            <th>Actions</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        }
-    </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var evt in Model.PendingEvents)
+                        {
+                            <tr>
+                                <td>@evt.Title</td>
+                                <td>@evt.Date.ToShortDateString()</td>
+                                <td>@evt.ClubName</td>
+                                <td>
+                                    <button class="btn btn-success btn-sm">Approve</button>
+                                    <button class="btn btn-danger btn-sm">Reject</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    *@
 
     <!-- NOTIFICATIONS SECTION -->
     <div class="section-card">
@@ -100,21 +107,21 @@
     <div class="section-card">
         <h3>Campus Overview</h3>
 
-        <p><strong>Total Clubs:</strong> @Model?.Clubs?.Count</p>
-        <p><strong>Total Events:</strong> @Model?.Events?.Count</p>
-        <p><strong>Total Attendance Records:</strong> @Model.Attendance.Count</p>
+        <p><strong>Total Clubs:</strong> @(Model?.Events?.Count ?? 0)</p>
+        <p><strong>Total Events:</strong> @(Model?.Events?.Count ?? 0)</p>
+        <p><strong>Total Attendance Records:</strong> @(Model?.Attendance?.Count ?? 0)</p>
 
         <hr />
 
         <h4>Recent Events</h4>
         @{
-            var recentEvents = Model?.Events?.Take(5) ?? Enumerable.Empty<hack2gether.Models.Event>();
+            var recentEvents = Model?.Events?.Take(5) ?? Enumerable.Empty<Club>();
         }
 
         <ul>
             @foreach (var evt in recentEvents)
             {
-                <li>@evt.Title — @evt.Date.ToShortDateString()</li>
+                <li>@evt.name — @evt.description</li>
             }
         </ul>
     </div>
