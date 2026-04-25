@@ -1,75 +1,70 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using hack2gether.Data;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace hack2gether.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _db;
 
-        public AccountController(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+        public AccountController(ApplicationDbContext db)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
+            _db = db;
         }
 
-        // ---------------- REGISTER ----------------
-        [HttpPost]
-        public async Task<IActionResult> Register(string email, string password, string role)
+        [HttpGet]
+        public IActionResult Login()
         {
-            // Ensure roles exist
-            if (!await _roleManager.RoleExistsAsync(role))
-                await _roleManager.CreateAsync(new IdentityRole(role));
-
-            var user = new IdentityUser { UserName = email, Email = email };
-            var result = await _userManager.CreateAsync(user, password);
-
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(user, role);
-                return RedirectToAction("Index", "Home"); // returns to login page
-            }
-
-            return RedirectToAction("Index", "Home");
+            return View("~/Views/Student/Login.cshtml");
         }
 
-        // ---------------- LOGIN ----------------
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password, string role)
+        public IActionResult Login(string email, string password, string role)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = _db.Users
+                .FirstOrDefault(u => u.Email == email && u.Password == password);
 
             if (user == null)
-                return RedirectToAction("Index", "Home");
+            {
+                ViewBag.Error = "Invalid email or password";
+                return View("~/Views/Student/Login.cshtml");
+            }
 
-            // Check password
-            var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
+            // Convert dropdown values to match DB values
+            string normalizedRole = role switch
+            {
+                "ClubAdmin" => "Club Admin",
+                "EngagementStaff" => "Engagement Staff",
+                _ => role
+            };
 
-            if (!result.Succeeded)
-                return RedirectToAction("Index", "Home");
+            // Ensure selected role matches the user's actual role
+            if (user.Role != normalizedRole)
+            {
+                ViewBag.Error = "Incorrect role selected";
+                return View("~/Views/Student/Login.cshtml");
+            }
 
-            // Check if user has the selected role
-            if (!await _userManager.IsInRoleAsync(user, role))
-                return RedirectToAction("Index", "Home");
+            // Store user info in session
+            HttpContext.Session.SetString("Username", user.Username);
+            HttpContext.Session.SetString("Role", user.Role);
 
             // Redirect based on role
-            if (role == "Student")
-                return RedirectToAction("Dashboard", "Student");
+            return normalizedRole switch
+            {
+                "Student" => RedirectToAction("StudentDashboard", "Student"),
+                "Club Admin" => RedirectToAction("AdminDashboard", "ClubAdmin"),
+                "Engagement Staff" => RedirectToAction("EngagementDashboard", "EngagementStaff"),
+                _ => RedirectToAction("Index", "Home")
+            };
+        }
 
-            if (role == "ClubAdmin")
-                return RedirectToAction("Dashboard", "ClubAdmin");
-
-            if (role == "EngagementStaff")
-                return RedirectToAction("Dashboard", "EngagementStaff");
-
-            return RedirectToAction("Index", "Home");
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
         }
     }
 }

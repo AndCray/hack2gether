@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+    body {
+        background-color: #00447b;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+    }
+
+    .card {
+        background-color: #ffffff;
+        color: #000000;
+        border-radius: 10px;
+    }
+
+    label {
+        color: #000000;
+    }
+
+    .toggle-btn {
+        cursor: pointer;
+    }
+</style>
+
+<div class="text-center mt-5">
+    <h1 class="display-4 mb-4">Student Engagement Platform</h1>
+</div>
+
+<div class="d-flex justify-content-center">
+    <div class="card shadow p-4" style="width: 420px;">
+
+        <h4 class="text-center mb-4">Login</h4>
+
+        <form method="post" asp-controller="Account" asp-action="Login">
+            <div class="form-group mb-3">
+                <label>Email</label>
+                <input name="email" class="form-control" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Password</label>
+                <input name="password" type="password" class="form-control" required />
+            </div>
+
+            <div class="form-group mb-4">
+                <label>Select Role</label>
+                <select name="role" class="form-control" required>
+                    <option value="">-- Choose your role --</option>
+                    <option value="Student">Student</option>
+                    <option value="ClubAdmin">Club Admin</option>
+                    <option value="EngagementStaff">Engagement Staff</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+
+            <p style="color:red">@ViewBag.Error</p>
+        </form>
+
+    </div>
+</div>
