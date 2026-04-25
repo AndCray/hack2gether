@@ -1,0 +1,35 @@
+﻿@model List<hack2gether.Models.Event>
+
+<h2>Pending Event Approvals</h2>
+
+@if (!Model.Any())
+{
+    <p>No pending events.</p>
+}
+else
+{
+    <table class="table table-bordered table-light">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Club</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var evt in Model)
+            {
+                <tr>
+                    <td>@evt.Title</td>
+                    <td>@evt.Date.ToShortDateString()</td>
+                    <td>@evt.ClubName</td>
+                    <td>
+                        <button class="btn btn-success btn-sm">Approve</button>
+                        <button class="btn btn-danger btn-sm">Reject</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

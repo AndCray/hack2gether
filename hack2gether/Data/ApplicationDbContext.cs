@@ -10,6 +10,9 @@ namespace hack2gether.Data
         {
         }
 
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Club> Clubs { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Attendance> Attendance { get; set; }
     }
 }

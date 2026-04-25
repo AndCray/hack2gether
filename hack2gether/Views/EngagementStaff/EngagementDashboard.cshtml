@@ -1,110 +1,122 @@
-﻿@model EngagementDashboardViewModel
+﻿@model hack2gether.Models.EngagementDashboardViewModel
 
 @{
-    ViewData["Title"] = "Student Engagement Dashboard";
+    ViewData["Title"] = "Engagement Staff Dashboard";
 }
 
-<div class="container mt-4">
+<style>
+    body {
+        background-color: #00447b;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+    }
 
-    <h1 class="mb-4">Student Engagement Dashboard</h1>
+    .section-card {
+        background: #ffffff;
+        color: #000;
+        padding: 1.25rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
 
-    <!-- Pending Event Approvals -->
-    <section class="mb-5">
-        <h2>Pending Event Approvals</h2>
+    h3 {
+        margin-bottom: 1rem;
+    }
 
-        @if (Model.PendingEvents.Any())
+    table {
+        background: #fff;
+    }
+</style>
+
+<div class="text-center mt-4 mb-4">
+    <h1 class="display-5">Engagement Staff Command Center</h1>
+    <p>Approve events • Route notifications • Campus at a glance</p>
+</div>
+
+<div class="container">
+
+    <!-- APPROVE EVENTS SECTION -->
+    <div class="section-card">
+        <h3>Approve Events</h3>
+
+        @if (Model?.PendingEvents == null || !Model.PendingEvents.Any())
         {
-            <table class="table table-striped">
+            <p>No pending events.</p>
+        }
+        else
+        {
+            <table class="table table-bordered table-light">
                 <thead>
                     <tr>
                         <th>Event</th>
-                        <th>Club</th>
                         <th>Date</th>
-                        <th>Submitted By</th>
+                        <th>Club</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var ev in Model.PendingEvents)
+                    @foreach (var evt in Model.PendingEvents)
                     {
                         <tr>
-                            <td>@ev.Title</td>
-                            <td>@ev.ClubName</td>
-                            <td>@ev.Date.ToString("MMMM dd, yyyy")</td>
-                            <td>@ev.SubmittedBy</td>
+                            <td>@evt.Title</td>
+                            <td>@evt.Date.ToShortDateString()</td>
+                            <td>@evt.ClubName</td>
                             <td>
-                                <form method="post" asp-action="ApproveEvent" class="d-inline">
-                                    <input type="hidden" name="EventId" value="@ev.Id" />
-                                    <button class="btn btn-success btn-sm">Approve</button>
-                                </form>
-
-                                <form method="post" asp-action="RejectEvent" class="d-inline">
-                                    <input type="hidden" name="EventId" value="@ev.Id" />
-                                    <button class="btn btn-danger btn-sm">Reject</button>
-                                </form>
+                                <button class="btn btn-success btn-sm">Approve</button>
+                                <button class="btn btn-danger btn-sm">Reject</button>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
         }
-        else
-        {
-            <p>No pending events at this time.</p>
-        }
+    </div>
 
-        <hr />
-    </section>
+    <!-- NOTIFICATIONS SECTION -->
+    <div class="section-card">
+        <h3>Route Notifications</h3>
 
-    <!-- Campus Overview -->
-    <section class="mb-5">
-        <h2>Campus Events Overview</h2>
-
-        <div class="row">
-            @foreach (var ev in Model.AllEvents)
-            {
-                <div class="col-md-4 mb-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">@ev.Title</h5>
-                            <p class="card-text">
-                                <strong>Club:</strong> @ev.ClubName<br />
-                                <strong>Date:</strong> @ev.Date.ToString("MMMM dd, yyyy")<br />
-                                <strong>Location:</strong> @ev.Location
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-
-        <hr />
-    </section>
-
-    <!-- Notification Routing -->
-    <section class="mb-5">
-        <h2>Route Notifications</h2>
-
-        <form method="post" asp-action="RouteNotification">
-            <div class="mb-3">
-                <label class="form-label">Message</label>
-                <textarea name="Message" class="form-control" rows="3" required></textarea>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Send To Department</label>
-                <select name="Department" class="form-select" required>
-                    <option value="">Select a department</option>
-                    <option>Student Affairs</option>
-                    <option>Campus Safety</option>
+        <form>
+            <div class="form-group mb-3">
+                <label>Department</label>
+                <select class="form-control">
+                    <option>Student Life</option>
+                    <option>Security</option>
                     <option>Facilities</option>
-                    <option>IT Services</option>
-                    <option>Communications</option>
+                    <option>IT</option>
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Send Notification</button>
+            <div class="form-group mb-3">
+                <label>Message</label>
+                <textarea class="form-control" rows="4"></textarea>
+            </div>
+
+            <button class="btn btn-primary">Send Notification</button>
         </form>
-    </section>
+    </div>
+
+    <!-- CAMPUS OVERVIEW SECTION -->
+    <div class="section-card">
+        <h3>Campus Overview</h3>
+
+        <p><strong>Total Clubs:</strong> @Model?.Clubs?.Count</p>
+        <p><strong>Total Events:</strong> @Model?.Events?.Count</p>
+        <p><strong>Total Attendance Records:</strong> @Model.Attendance.Count</p>
+
+        <hr />
+
+        <h4>Recent Events</h4>
+        @{
+            var recentEvents = Model?.Events?.Take(5) ?? Enumerable.Empty<hack2gether.Models.Event>();
+        }
+
+        <ul>
+            @foreach (var evt in recentEvents)
+            {
+                <li>@evt.Title — @evt.Date.ToShortDateString()</li>
+            }
+        </ul>
+    </div>
 
 </div>

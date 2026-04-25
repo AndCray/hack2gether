@@ -1,0 +1,19 @@
+﻿@{
+    var events = Model.Events;
+    var clubs = Model.Clubs;
+}
+
+<h2>Campus Overview</h2>
+
+<h4>Total Clubs: @clubs.Count</h4>
+<h4>Total Events: @events.Count</h4>
+
+<hr />
+
+<h3>Recent Events</h3>
+<ul>
+    @foreach (var evt in events.Take(5))
+    {
+        <li>@evt.Title — @evt.Date.ToShortDateString()</li>
+    }
+</ul>
