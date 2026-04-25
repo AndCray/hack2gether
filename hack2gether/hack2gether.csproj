@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\trophies\bronze.webp" />
+    <None Include="wwwroot\trophies\bronze.webp">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Include="wwwroot\trophies\diamond.webp" />
     <None Include="wwwroot\trophies\gold.webp" />
     <None Include="wwwroot\trophies\iron.webp" />
