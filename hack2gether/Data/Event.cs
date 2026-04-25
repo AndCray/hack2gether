@@ -1,11 +1,13 @@
-namespace hack2gether.Models
+using hack2gether.Models;
+
+public class Event
 {
-    public class Event
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public DateTime Date { get; set; }
-        public string ClubName { get; set; }
-        public string Status { get; internal set; }
-    }
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string Status { get; set; } // Pending, Approved, etc.
+    public int ClubId { get; set; }
+    public Club Club { get; set; }
+
+    public bool RequiresRegistration { get; set; }
+    public string CheckInCode { get; set; } // for digital check-in
 }

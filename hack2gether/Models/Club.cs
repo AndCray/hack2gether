@@ -6,8 +6,9 @@ namespace hack2gether.Models
     {
         [Key]
         public int Id { get; set; }   // PRIMARY KEY
-
         public string Name { get; set; }
         public string Description { get; set; }
+        public int AdminId { get; set; }   // <-- REQUIRED
+        public User Admin { get; set; }
     }
 }

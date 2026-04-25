@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<hack2gether.Models.User>
+
+@{
     ViewData["Title"] = "Student Dashboard";
 }
 
@@ -108,28 +110,30 @@
 
         <div class="progress-bar-vertical">
             <!-- Fill percentage (example: 45%) -->
-            <div class="progress-fill" style="height: 45%;"></div>
+            <div class="progress-fill"></div>
 
             <!-- Milestones -->
-            <div class="milestone" style="bottom: 25%;">
-                <img href="/trophies/bronze.webp" alt="Bronze Tier" />
+            <div class="milestone" style="bottom: 10%;">
+                <img src="/trophies/bronze.webp" alt="Bronze Tier" />
                 <span>Bronze – 100 pts</span>
             </div>
 
-            <div class="milestone" style="bottom: 50%;">
-                <img href="/trophies/iron.webp" alt="Iron Tier" />
-                <span>Iron – 250 pts</span>
+            <div class="milestone" style="bottom: 33%;">
+                <img src="/trophies/iron.webp" alt="Iron Tier" />
+                <span>Iron – 330 pts</span>
             </div>
 
             <div class="milestone" style="bottom: 75%;">
-                <img href="/trophies/gold.webp" alt="Gold Tier" />
-                <span>Gold – 500 pts</span>
+                <img src="/trophies/gold.webp" alt="Gold Tier" />
+                <span>Gold – 750 pts</span>
             </div>
 
             <div class="milestone" style="bottom: 100%;">
-                <img href="/trophies/diamond.webp" alt="Diamond Tier" />
+                <img src="/trophies/diamond.webp" alt="Diamond Tier" />
                 <span>Diamond – 1000 pts</span>
             </div>
+
+            
         </div>
     </div>
 
@@ -154,12 +158,11 @@
         </div>
 
         <!-- Check In -->
-        <div class="section-card">
-            <div class="section-title">Event Check‑In</div>
-            <p>Enter your event code to check in and earn points.</p>
-            <input class="form-control mb-2" placeholder="Enter event code" />
-            <button class="btn btn-success">Check In</button>
-        </div>
+        <form asp-action="CheckIn" method="post">
+            <input type="hidden" name="eventId" value="0" />
+            <input type="text" name="code" placeholder="Enter check-in code" />
+            <button type="submit" class="btn btn-primary">Check In</button>
+        </form>
 
         <!-- Feedback -->
         <div class="section-card">

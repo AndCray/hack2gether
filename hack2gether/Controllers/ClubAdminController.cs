@@ -1,41 +1,45 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using hack2gether.Data;
+﻿using hack2gether.Data;
+using Microsoft.AspNetCore.Mvc;
 
-namespace hack2gether.Controllers
+public class ClubAdminController : Controller
 {
-    public class ClubAdminController : Controller
+    private readonly ApplicationDbContext _db;
+
+    public ClubAdminController(ApplicationDbContext db) => _db = db;
+
+    // GET: list of events for this club admin
+    public IActionResult MyEvents()
     {
-        private readonly ApplicationDbContext _db;
+        var userId = GetCurrentUserId();
 
-        public ClubAdminController(ApplicationDbContext db)
-        {
-            _db = db;
-        }
+        var events = _db.Events
+            .Where(e => e.Club.AdminId == userId)
+            .ToList();
 
-        public IActionResult Dashboard()
-        {
-            // No model needed for the new dashboard
-            return View("AdminDashboard");
-        }
+        return View(events);
+    }
 
-        public IActionResult Officers()
-        {
-            return View();
-        }
+    private int GetCurrentUserId()
+    {
+        return HttpContext.Session.GetInt32("UserId") ?? 0;
+    }
 
-        public IActionResult CreateEvent()
-        {
-            return View();
-        }
+    // GET: create event form
+    public IActionResult CreateEvent() => View();
 
-        public IActionResult CheckIn()
-        {
-            return View();
-        }
+    // POST: create event
+    [HttpPost]
+    public IActionResult CreateEvent(Event model)
+    {
+        if (!ModelState.IsValid) return View(model);
 
-        public IActionResult Presence()
-        {
-            return View();
-        }
+        // set defaults
+        model.Status = "Pending";
+        model.CheckInCode = Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
+
+        _db.Events.Add(model);
+        _db.SaveChanges();
+
+        return RedirectToAction("MyEvents");
     }
 }

@@ -18,12 +18,16 @@ namespace hack2gether.Controllers
         {
             var model = new EngagementDashboardViewModel
             {
-                Events = _db.Events.ToList(),
+                // Events = _db.Events.ToList(),
                 Clubs = _db.Clubs.ToList(),
                 Attendance = _db.Attendance.ToList()
             };
 
             return View(model);
+        }
+        private int GetCurrentUserId()
+        {
+            return HttpContext.Session.GetInt32("UserId") ?? 0;
         }
 
         public IActionResult Dashboard()

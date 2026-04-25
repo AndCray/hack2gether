@@ -5,8 +5,7 @@ namespace hack2gether.Models
 {
     public class Attendance
     {
-        [Key]
-        public int Id { get; set; }   // PRIMARY KEY
+        public int Id { get; set; }
 
         public int EventId { get; set; }
         public Event Event { get; set; }
@@ -15,5 +14,6 @@ namespace hack2gether.Models
         public User Student { get; set; }
 
         public DateTime Timestamp { get; set; }
+        public int PointsAwarded { get; set; }
     }
 }

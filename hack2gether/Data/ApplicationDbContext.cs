@@ -14,5 +14,7 @@ namespace hack2gether.Data
         public DbSet<Club> Clubs { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Attendance> Attendance { get; set; }
+        public DbSet<Survey> Surveys { get; set; }
+        public DbSet<SurveyResponse> SurveyResponses { get; set; }
     }
 }

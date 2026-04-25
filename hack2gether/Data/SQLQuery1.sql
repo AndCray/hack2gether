@@ -29,9 +29,9 @@ CREATE TABLE events (
 	description TEXT,
 	date DATE NOT NULL,
 	location VARCHAR(255) NOT NULL,
-	organizer_id INT NOT NULL,
-	FOREIGN KEY (organizer_id) REFERENCES users(id)
+	admin_id INT NOT NULL,
+	FOREIGN KEY (admin_id) REFERENCES users(id)
 );
-INSERT INTO events (id, name, description, date, location, organizer_id) VALUES
-(000001, 'Hackathon', 'A 24-hour coding event', '2024-10-01', 'OTC Main Hall', 000002),
-(000002, 'Tech Talk', 'A talk on the latest tech trends', '2024-11-15', 'OTC Conference Room', 000003);
+INSERT INTO events (id, name, description, date, location, admin_id) VALUES
+(000002, 'Hackathon', 'A 24-hour coding event', '2024-10-01', 'OTC Main Hall', 000002),
+(000003, 'Tech Talk', 'A talk on the latest tech trends', '2024-11-15', 'OTC Conference Room', 000003);
