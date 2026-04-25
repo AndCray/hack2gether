@@ -30,13 +30,13 @@ namespace hack2gether.Controllers
         {
             var userId = GetCurrentUserId();
 
-            var evt = _db.Events.FirstOrDefault(e => e.Id == eventId && e.CheckInCode == code);
-            if (evt == null)
-            {
+            //var evt = _db.Events.FirstOrDefault(e => e.Id == eventId && e.CheckInCode == code);
+            //if (evt == null)
+            //{
                 // invalid code
-                TempData["Error"] = "Invalid check-in code.";
-                return RedirectToAction("StudentDashboard");
-            }
+            //    TempData["Error"] = "Invalid check-in code.";
+            //    return RedirectToAction("StudentDashboard");
+            //}
 
             // prevent duplicate check-in
             bool alreadyCheckedIn = _db.Attendance
@@ -46,7 +46,7 @@ namespace hack2gether.Controllers
             {
                 var attendance = new Attendance
                 {
-                    EventId = eventId,
+                    //EventId = eventId,
                     StudentId = (int)userId,
                     Timestamp = DateTime.UtcNow,
                     PointsAwarded = 10 // example

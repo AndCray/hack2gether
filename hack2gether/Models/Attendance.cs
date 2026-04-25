@@ -8,7 +8,7 @@ namespace hack2gether.Models
         public int Id { get; set; }
 
         public int EventId { get; set; }
-        public Event Event { get; set; }
+        //public Event Event { get; set; }
 
         public int StudentId { get; set; }
         public User Student { get; set; }
